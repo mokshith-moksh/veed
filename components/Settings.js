@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
-import Video from "./Video";
 const Settings = ({ canvas }) => {
   const [selectedObject, setSelectedObject] = useState(null);
   const [width, setWidth] = useState(0);

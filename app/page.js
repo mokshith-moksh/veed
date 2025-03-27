@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import Settings from "@/components/Settings";
 import PlayButton from "@/components/PlayButton";
 import Video from "@/components/Video";
-import Images from "@/components/Image";
+
 const Home = () => {
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState(null);

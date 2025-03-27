@@ -67,7 +67,12 @@ const Video = ({ canvas }) => {
           scaleY: scale,
         });
 
-        setFabricVideo(fabricImage);
+        videoElement.currentTime = 0; // Seek to start
+        videoElement.play().then(() => {
+          videoElement.pause(); // Pause immediately after 1 frame
+          setFabricVideo(fabricImage); // Update Fabric.js object
+          canvas.renderAll(); // Refresh canvas
+        });
         canvas.add(fabricImage);
         canvas.renderAll();
 

@@ -7,23 +7,35 @@ const PlayButton = ({ canvas }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const handlePlay = () => {
     if (!canvas) return;
-
     setIsPlaying(true);
     setCurrentTime(0);
-
     intervalRef.current = setInterval(() => {
       setCurrentTime((prevTime) => {
         const newTime = prevTime + 1;
-        // Loop through all objects and toggle visibility
+
         canvas.getObjects().forEach((obj) => {
-          console.log(obj.startTime, obj.endTime);
           if (obj.startTime !== undefined && obj.endTime !== undefined) {
+            const wasVisible = obj.visible;
             obj.visible = newTime >= obj.startTime && newTime <= obj.endTime;
+
+            // Handle video playback
+            if (obj.getElement && obj.getElement().tagName === "VIDEO") {
+              const videoElement = obj.getElement();
+              if (obj.visible && !wasVisible) {
+                // Video just became visible → Play
+                videoElement.currentTime = 0; // Optional: Restart from beginning
+                videoElement.play();
+              } else if (!obj.visible && wasVisible) {
+                // Video just became invisible → Pause
+                videoElement.pause();
+              }
+            }
           }
         });
-        canvas.renderAll(); // Update canvas
+
+        canvas.renderAll();
+
         if (newTime >= 10) {
-          // Stop at 10 seconds
           clearInterval(intervalRef.current);
           setIsPlaying(false);
         }
