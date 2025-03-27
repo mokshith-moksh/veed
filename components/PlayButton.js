@@ -1,63 +1,80 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Timeline from "@/components/TimeLine";
 
 const PlayButton = ({ canvas }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const intervalRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
+  const duration = 60;
+
   const handlePlay = () => {
     if (!canvas) return;
     setIsPlaying(true);
-    setCurrentTime(0);
+
     intervalRef.current = setInterval(() => {
       setCurrentTime((prevTime) => {
         const newTime = prevTime + 1;
-
-        canvas.getObjects().forEach((obj) => {
-          if (obj.startTime !== undefined && obj.endTime !== undefined) {
-            const wasVisible = obj.visible;
-            obj.visible = newTime >= obj.startTime && newTime <= obj.endTime;
-
-            // Handle video playback
-            if (obj.getElement && obj.getElement().tagName === "VIDEO") {
-              const videoElement = obj.getElement();
-              if (obj.visible && !wasVisible) {
-                // Video just became visible → Play
-                videoElement.currentTime = 0; // Optional: Restart from beginning
-                videoElement.play();
-              } else if (!obj.visible && wasVisible) {
-                // Video just became invisible → Pause
-                videoElement.pause();
-              }
-            }
-          }
-        });
-
-        canvas.renderAll();
-
-        if (newTime >= 10) {
+        if (newTime >= duration) {
           clearInterval(intervalRef.current);
           setIsPlaying(false);
+          return duration;
         }
+
+        updateCanvas(newTime);
         return newTime;
       });
     }, 1000);
   };
-  // Cleanup on unmount to prevent memory leaks
+
+  const handlePause = () => {
+    clearInterval(intervalRef.current);
+    setIsPlaying(false);
+  };
+
+  const updateCanvas = (time) => {
+    if (!canvas) return;
+    canvas.getObjects().forEach((obj) => {
+      const wasVisible = obj.visible;
+      obj.visible = time >= obj.startTime && time <= obj.endTime;
+
+      if (obj.getElement && obj.getElement().tagName === "VIDEO") {
+        const videoElement = obj.getElement();
+        if (obj.visible && !wasVisible) {
+          videoElement.currentTime = 0;
+          videoElement.play();
+        } else if (!obj.visible && wasVisible) {
+          videoElement.pause();
+        }
+      }
+    });
+    canvas.renderAll();
+  };
+
   useEffect(() => {
     return () => clearInterval(intervalRef.current);
   }, []);
+
   return (
     <div>
       <div className="mt-4">
         <p className="text-black">Timer: {currentTime}s</p>
         <button
-          onClick={handlePlay}
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-          disabled={isPlaying}
+          onClick={isPlaying ? handlePause : handlePlay}
+          className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2"
         >
-          {isPlaying ? "Playing..." : "Play"}
+          {isPlaying ? "Pause" : "Play"}
         </button>
+      </div>
+      <div className="w-[100vw]">
+        <Timeline
+          currentTime={currentTime}
+          duration={duration}
+          onTimeChange={(time) => {
+            setCurrentTime(time);
+            handlePause(); // Pause playback when user drags and releases timeline
+            updateCanvas(time);
+          }}
+        />
       </div>
     </div>
   );
