@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { fabric } from "fabric";
+import { Image } from "fabric";
 import { FabricImage } from "fabric";
-const Video = ({ canvas, canvasRef }) => {
+const Video = ({ canvas }) => {
   const [videoSrc, setVideoSrc] = useState(null);
   const [fabricVideo, setFabricVideo] = useState(null);
   const [loadPercentage, setLoadPercentage] = useState(0);
@@ -13,7 +13,27 @@ const Video = ({ canvas, canvasRef }) => {
 
   const handleVideoUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
+    const fileType = file.type;
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
+    if (fileType.startsWith("image/")) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const image = await Image.fromURL(e.target.result);
+        image.scale(0.5);
+        image.startTime = 2; // Start time in seconds
+        image.endTime = 8; // End time in seconds
+        canvas.add(image);
+        canvas.centerObject(image);
+        canvas.setActiveObject(image);
+      };
+      reader.readAsDataURL(file);
+      e.target.value = "";
+    }
+    if (fileType.startsWith("video/")) {
       setLoadPercentage(0);
       setVideoSrc(null);
       setUploadMessage("");
@@ -24,7 +44,6 @@ const Video = ({ canvas, canvasRef }) => {
       const videoElement = document.createElement("video");
       videoElement.src = url;
       videoElement.crossOrigin = "anonymous";
-
       videoElement.addEventListener("loadedmetadata", () => {
         const videoWidth = videoElement.videoWidth;
         const videoHeight = videoElement.videoHeight;
@@ -55,7 +74,7 @@ const Video = ({ canvas, canvasRef }) => {
         setUploadMessage("Video uploaded successfully");
         setTimeout(() => {
           setUploadMessage("");
-        }, 3000);
+        }, 1000);
       });
 
       videoElement.addEventListener("progress", () => {
@@ -106,19 +125,24 @@ const Video = ({ canvas, canvasRef }) => {
       <input
         ref={fileInputRef}
         type="file"
-        accept="video/mp4"
+        accept="image/*,video/*"
         onChange={handleVideoUpload}
         style={{ display: "none" }}
       />
       <button onClick={handleVideoUploadButtonClick} className="text-black">
-        Video Upload
+        Multi Upload
       </button>
       {videoSrc && (
         <div>
-          <button onClick={handlePlayPauseVideo}>
-            {isPlaying ? "Pause" : "Play"}
-          </button>
-          <button onClick={handleStopVideo}>Stop</button>
+          <div className="flex gap-14">
+            <button onClick={handlePlayPauseVideo} className="text-black">
+              {isPlaying ? "Pause" : "Play"}
+            </button>
+            <button onClick={handleStopVideo} className="text-black">
+              Stop
+            </button>
+          </div>
+
           <div className="flex flex-col items-center justify-center w-[10vw] h-[10vh] bg-black">
             <div className="flex flex-col items-center justify-center w-[10vw] h-[10vh] bg-black">
               {loadPercentage > 0 && (
