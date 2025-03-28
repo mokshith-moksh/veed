@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Image } from "fabric";
 import { FabricImage } from "fabric";
+import { DropzoneButton } from "./DropZoneButton";
 const Video = ({ canvas }) => {
   const [videoSrc, setVideoSrc] = useState(null);
   const [fabricVideo, setFabricVideo] = useState(null);
@@ -127,6 +128,7 @@ const Video = ({ canvas }) => {
   };
   return (
     <div>
+      <DropzoneButton />
       <input
         ref={fileInputRef}
         type="file"

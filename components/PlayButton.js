@@ -55,7 +55,7 @@ const PlayButton = ({ canvas }) => {
   }, []);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="mt-4">
         <p className="text-black">Timer: {currentTime}s</p>
         <button
@@ -65,7 +65,7 @@ const PlayButton = ({ canvas }) => {
           {isPlaying ? "Pause" : "Play"}
         </button>
       </div>
-      <div className="w-[100vw]">
+      <div className="">
         <Timeline
           currentTime={currentTime}
           duration={duration}

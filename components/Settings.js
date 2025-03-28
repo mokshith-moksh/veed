@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
+import { Clock } from "lucide-react";
+import { Square } from "lucide-react";
 const Settings = ({ canvas }) => {
   const [selectedObject, setSelectedObject] = useState(null);
   const [width, setWidth] = useState(0);
@@ -138,33 +140,61 @@ const Settings = ({ canvas }) => {
 
   return (
     <div>
-      <div className="flex flex-col items-center justify-center w-[10vw] h-[10vh] bg-black">
+      <div className="flex flex-col items-center justify-center w-full h-full">
         {selectedObject && (
           <>
-            <input
-              placeholder="Width"
-              value={width}
-              onChange={handleWidthChange}
-              className="bg-white text-black"
-            />
-            <input
-              placeholder="Height"
-              value={height}
-              onChange={handleHeightChange}
-              className="bg-white text-black"
-            />
-            <input
-              placeholder="Start"
-              value={startTime}
-              onChange={handleStartChange}
-              className="bg-white text-black"
-            />
-            <input
-              placeholder="End"
-              value={endTime}
-              onChange={handleEndChange}
-              className="bg-red-300 text-black"
-            />
+            <div className="flex items-center border rounded-lg px-4 py-2 space-x-3 text-gray-700">
+              {/* Width */}
+              <Square className="w-5 h-5 text-gray-600" />
+              <span className="text-gray-600">Width</span>
+              <input
+                type="text"
+                placeholder="Width"
+                value={width}
+                onChange={handleWidthChange}
+                className="bg-white text-black text-center outline-none w-16"
+              />
+
+              {/* Divider */}
+              <span className="text-gray-400">|</span>
+
+              {/* Height */}
+              <span className="text-gray-600">Height</span>
+              <input
+                type="text"
+                placeholder="Height"
+                value={height}
+                onChange={handleHeightChange}
+                className="bg-white text-black text-center outline-none w-16"
+              />
+              <Square className="w-5 h-5 text-gray-600" />
+            </div>
+            <div className="flex items-center border rounded-lg px-4 py-2 space-x-3 text-gray-700">
+              {/* Start Time */}
+              <Clock className="w-5 h-5 text-gray-600" />
+              <span className="text-gray-600">Start</span>
+              <input
+                type="text"
+                placeholder="Start"
+                value={startTime}
+                onChange={handleStartChange}
+                className="bg-white text-black text-center outline-none w-16"
+              />
+
+              {/* Divider */}
+              <span className="text-gray-400">|</span>
+
+              {/* End Time */}
+              <span className="text-gray-600">End</span>
+              <input
+                type="text"
+                placeholder="End"
+                value={endTime}
+                onChange={handleEndChange}
+                className="bg-red-300 text-black text-center outline-none w-16"
+              />
+              <Clock className="w-5 h-5 text-gray-600" />
+            </div>
           </>
         )}
       </div>
