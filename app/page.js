@@ -4,7 +4,6 @@ import { Canvas } from "fabric";
 import { NavbarMinimal } from "@/components/NavbarMinimal";
 import Settings from "@/components/Settings";
 import PlayButton from "@/components/PlayButton";
-import Video from "@/components/Video";
 import { Search, HelpCircle } from "lucide-react";
 import { Button, Input } from "@mantine/core";
 
@@ -60,7 +59,6 @@ const Home = () => {
         <div className="grid grid-cols-12 flex-1 h-[80%]">
           {/* Left controls - takes 4/12 columns */}
           <div className="col-span-4 p-4 flex flex-col gap-4 border-r border-gray-200">
-            <Video canvas={canvas} />
             <Settings canvas={canvas} />
           </div>
           <div className="absolute top-0 z-10 right-2 w-[60%] pt-2">

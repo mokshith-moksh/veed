@@ -1,7 +1,7 @@
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css"; // Import Mantine styles
 import "@/app/globals.css";
-import { NavbarMinimal } from "@/components/NavbarMinimal";
+import { Notifications } from "@mantine/notifications";
 
 export const metadata = {
   title: "My App",
@@ -13,6 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <MantineProvider withGlobalStyles withNormalizeCSS>
+          <Notifications position="top-right" />
           <main>{children}</main>
         </MantineProvider>
       </body>

@@ -4,7 +4,7 @@ import { Button, Group, Text, useMantineTheme } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import classes from "@/styles/DropzoneButton.module.css";
 
-export function DropzoneButton() {
+export function DropzoneButton({ handleVideoUploadButtonClick }) {
   const theme = useMantineTheme();
   const openRef = useRef(null);
 
@@ -12,7 +12,7 @@ export function DropzoneButton() {
     <div className={classes.wrapper}>
       <Dropzone
         openRef={openRef}
-        onDrop={() => {}}
+        onDrop={handleVideoUploadButtonClick}
         className={classes.dropzone}
         radius="md"
         accept={[
@@ -59,7 +59,7 @@ export function DropzoneButton() {
         className={classes.control}
         size="md"
         radius="xl"
-        onClick={() => openRef.current?.()}
+        onClick={handleVideoUploadButtonClick}
       >
         Select files
       </Button>

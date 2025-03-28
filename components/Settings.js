@@ -3,6 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Clock } from "lucide-react";
 import { Square } from "lucide-react";
+import Video from "@/components/Video";
 const Settings = ({ canvas }) => {
   const [selectedObject, setSelectedObject] = useState(null);
   const [width, setWidth] = useState(0);
@@ -139,65 +140,82 @@ const Settings = ({ canvas }) => {
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center w-full h-full">
-        {selectedObject && (
-          <>
-            <div className="flex items-center border rounded-lg px-4 py-2 space-x-3 text-gray-700">
-              {/* Width */}
-              <Square className="w-5 h-5 text-gray-600" />
-              <span className="text-gray-600">Width</span>
-              <input
-                type="text"
-                placeholder="Width"
-                value={width}
-                onChange={handleWidthChange}
-                className="bg-white text-black text-center outline-none w-16"
-              />
-
-              {/* Divider */}
-              <span className="text-gray-400">|</span>
-
-              {/* Height */}
-              <span className="text-gray-600">Height</span>
-              <input
-                type="text"
-                placeholder="Height"
-                value={height}
-                onChange={handleHeightChange}
-                className="bg-white text-black text-center outline-none w-16"
-              />
-              <Square className="w-5 h-5 text-gray-600" />
-            </div>
-            <div className="flex items-center border rounded-lg px-4 py-2 space-x-3 text-gray-700">
-              {/* Start Time */}
-              <Clock className="w-5 h-5 text-gray-600" />
-              <span className="text-gray-600">Start</span>
-              <input
-                type="text"
-                placeholder="Start"
-                value={startTime}
-                onChange={handleStartChange}
-                className="bg-white text-black text-center outline-none w-16"
-              />
-
-              {/* Divider */}
-              <span className="text-gray-400">|</span>
-
-              {/* End Time */}
-              <span className="text-gray-600">End</span>
-              <input
-                type="text"
-                placeholder="End"
-                value={endTime}
-                onChange={handleEndChange}
-                className="bg-red-300 text-black text-center outline-none w-16"
-              />
-              <Clock className="w-5 h-5 text-gray-600" />
-            </div>
-          </>
-        )}
+    <div className="flex flex-col items-center justify-center w-full h-full space-y-4">
+      <div className="mt-2 w-full max-w-2xl">
+        <Video canvas={canvas} />
       </div>
+
+      {selectedObject && (
+        <div className="flex flex-col items-center w-full max-w-md space-y-4">
+          {/* Dimensions Control */}
+          <div className="flex items-center justify-between w-full p-4 bg-white rounded-lg shadow-md border border-gray-200">
+            <div className="flex items-center space-x-3">
+              <Square className="w-5 h-5 text-gray-600" />
+              <span className="text-sm font-medium text-gray-700">
+                Dimensions
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">W</span>
+                <input
+                  type="number"
+                  value={width}
+                  onChange={handleWidthChange}
+                  className="w-16 px-2 py-1 text-sm text-center text-gray-800 bg-gray-100 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="h-5 w-px bg-gray-300" />
+
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">H</span>
+                <input
+                  type="number"
+                  value={height}
+                  onChange={handleHeightChange}
+                  className="w-16 px-2 py-1 text-sm text-center text-gray-800 bg-gray-100 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Timeline Control */}
+          <div className="flex items-center justify-between w-full p-4 bg-white rounded-lg shadow-md border border-gray-200">
+            <div className="flex items-center space-x-3">
+              <Clock className="w-5 h-5 text-gray-600" />
+              <span className="text-sm font-medium text-gray-700">
+                Timeline
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">Start</span>
+                <input
+                  type="number"
+                  value={startTime}
+                  onChange={handleStartChange}
+                  className="w-16 px-2 py-1 text-sm text-center text-gray-800 bg-gray-100 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="h-5 w-px bg-gray-300" />
+
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">End</span>
+                <input
+                  type="number"
+                  value={endTime}
+                  onChange={handleEndChange}
+                  className="w-16 px-2 py-1 text-sm text-center text-gray-800 bg-gray-100 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
