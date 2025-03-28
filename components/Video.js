@@ -246,7 +246,7 @@ const Video = ({ canvas }) => {
         onChange={handleVideoUpload}
         style={{ display: "none" }}
       />
-      {videoSrc && selectedObject && (
+      {videoSrc && selectedObject.getElement().tagName === "VIDEO" && (
         <div className="flex flex-col items-center gap-2 mt-12">
           {/* Timeline display */}
           <div className="w-full bg-gray-200 h-2 rounded-full relative">

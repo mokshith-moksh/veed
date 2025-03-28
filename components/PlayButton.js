@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Timeline from "@/components/TimeLine";
+import { Button } from "@mantine/core";
 
 const PlayButton = ({ canvas }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -7,23 +8,34 @@ const PlayButton = ({ canvas }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const duration = 60;
 
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
+    const tenths = Math.floor((time % 1) * 10).toString();
+    return `${minutes}:${seconds}.${tenths}`;
+  };
+
   const handlePlay = () => {
     if (!canvas) return;
     setIsPlaying(true);
 
     intervalRef.current = setInterval(() => {
       setCurrentTime((prevTime) => {
-        const newTime = prevTime + 1;
+        const newTime = prevTime + 0.1; // Update every 100ms for smoother timer
         if (newTime >= duration) {
           clearInterval(intervalRef.current);
           setIsPlaying(false);
           return duration;
         }
 
-        updateCanvas(newTime);
+        updateCanvas(Math.floor(newTime)); // Update canvas with whole seconds
         return newTime;
       });
-    }, 1000);
+    }, 100);
   };
 
   const handlePause = () => {
@@ -55,24 +67,39 @@ const PlayButton = ({ canvas }) => {
   }, []);
 
   return (
-    <div className="w-full">
-      <div className="mt-4">
-        <p className="text-black">Timer: {currentTime}s</p>
-        <button
+    <div className="w-full flex flex-col items-center justify-center">
+      {/* Timer & Controls */}
+      <div className="flex items-center justify-center gap-4 w-full mt-3">
+        <div className="flex items-center gap-1">
+          <span className="text-black text-lg font-mono">
+            {formatTime(currentTime)} / {formatTime(duration)}
+          </span>
+        </div>
+        <Button
           onClick={isPlaying ? handlePause : handlePlay}
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2"
+          size="md"
+          leftSection={
+            isPlaying ? (
+              <span className="text-base">⏸</span>
+            ) : (
+              <span className="text-base">▶</span>
+            )
+          }
+          className="px-3 py-1"
         >
           {isPlaying ? "Pause" : "Play"}
-        </button>
+        </Button>
       </div>
-      <div className="">
+
+      {/* Timeline Container */}
+      <div className="absolute bottom-0 w-full h-[75%]">
         <Timeline
           currentTime={currentTime}
           duration={duration}
           onTimeChange={(time) => {
             setCurrentTime(time);
-            handlePause(); // Pause playback when user drags and releases timeline
-            updateCanvas(time);
+            handlePause();
+            updateCanvas(Math.floor(time));
           }}
         />
       </div>

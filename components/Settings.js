@@ -77,34 +77,70 @@ const Settings = ({ canvas }) => {
 
   const handleWidthChange = (e) => {
     const value = e.target.value.replace(/,/g, "");
+
+    // Allow empty string to clear the input
+    if (value === "") {
+      setWidth("");
+      return;
+    }
+
     const intValue = parseInt(value, 10);
     if (isNaN(intValue)) return;
 
     setWidth(intValue);
 
-    if (selectedObject && intValue > 0) {
+    if (selectedObject && originalDimensions.width > 0 && intValue > 0) {
+      // Calculate new scale while maintaining aspect ratio
       const scaleX = intValue / originalDimensions.width;
+      const newScaleY = selectedObject.scaleY; // Keep existing Y scale
+
       selectedObject.set({
         scaleX: scaleX,
-        scaleY: scaleX, // maintain aspect ratio
+        // Only update scaleY if we want to maintain aspect ratio
+        // scaleY: scaleX // Uncomment this if you want to maintain aspect ratio
       });
+
+      // Update height display to match actual scaled height
+      const actualHeight = Math.round(
+        selectedObject.height * selectedObject.scaleY
+      );
+      setHeight(actualHeight);
+
       canvas.requestRenderAll();
     }
   };
 
   const handleHeightChange = (e) => {
     const value = e.target.value.replace(/,/g, "");
+
+    // Allow empty string to clear the input
+    if (value === "") {
+      setHeight("");
+      return;
+    }
+
     const intValue = parseInt(value, 10);
     if (isNaN(intValue)) return;
 
     setHeight(intValue);
 
-    if (selectedObject && intValue > 0) {
+    if (selectedObject && originalDimensions.height > 0 && intValue > 0) {
+      // Calculate new scale while maintaining aspect ratio
       const scaleY = intValue / originalDimensions.height;
+      const newScaleX = selectedObject.scaleX; // Keep existing X scale
+
       selectedObject.set({
         scaleY: scaleY,
-        scaleX: scaleY, // maintain aspect ratio
+        // Only update scaleX if we want to maintain aspect ratio
+        // scaleX: scaleY // Uncomment this if you want to maintain aspect ratio
       });
+
+      // Update width display to match actual scaled width
+      const actualWidth = Math.round(
+        selectedObject.width * selectedObject.scaleX
+      );
+      setWidth(actualWidth);
+
       canvas.requestRenderAll();
     }
   };

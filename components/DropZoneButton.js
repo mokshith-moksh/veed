@@ -44,13 +44,11 @@ export function DropzoneButton({ handleVideoUploadButtonClick }) {
           </Group>
 
           <Text ta="center" fw={700} fz="lg" mt="xl">
-            <Dropzone.Accept>Drop files here</Dropzone.Accept>
-            <Dropzone.Reject>Pdf file less than 30mb</Dropzone.Reject>
-            <Dropzone.Idle>Upload resume</Dropzone.Idle>
+            <Dropzone.Accept>Drop Image / Video here</Dropzone.Accept>
           </Text>
           <Text ta="center" fz="sm" mt="xs" c="dimmed">
-            Drag&apos;n&apos;drop files here to upload. We can accept only{" "}
-            <i>.pdf</i> files that are less than 30mb in size.
+            Drag&apos;n&apos;drop Image / Video here to upload. We can accept
+            only <i>.mp4,mov,webm,mkv, jpeg ,png, gif</i>
           </Text>
         </div>
       </Dropzone>

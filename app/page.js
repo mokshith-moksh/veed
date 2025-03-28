@@ -151,7 +151,7 @@ const Home = () => {
         </div>
 
         {/* Bottom Play Button */}
-        <div className="w-full h-[20%] border-t-2 border-black bg-amber-300 flex justify-center items-center">
+        <div className="w-full h-[25%] border-t-2 border-black relative">
           <PlayButton canvas={canvas} />
         </div>
       </div>
